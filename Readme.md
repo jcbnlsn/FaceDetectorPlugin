@@ -4,6 +4,8 @@ Documentation and samplecode for:
 
 The FaceDetector plugin analyzes images and detects if there are human faces in in it.  The plugin returns position data for bounding boxes, eyes and mouths of the faces detected in the image.
 
+Here is a small video demo: http://shakebrowser.net/fdvideo.html 
+
 ###**Syntax**
 ```lua
 faceDetector.track ( filename[, accuracy], listener )
