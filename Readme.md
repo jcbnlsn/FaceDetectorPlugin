@@ -2,7 +2,7 @@
 Documentation and samplecode for:
 ###**FaceDetector Plugin for Corona SDK**
 
-The FaceDetector plugin analyzes images and detects if there are human faces in in it.  The plugin returns position data for bounding boxes, eyes and mouths of the faces detected in the image.
+The FaceDetector plugin analyzes images and detects if there are human faces in them.  The plugin returns position data for bounding boxes, eyes and mouths of the faces detected in the image.
 
 Here is a small video demo: http://shakebrowser.net/fdvideo.html 
 
