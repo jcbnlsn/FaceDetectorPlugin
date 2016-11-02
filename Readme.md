@@ -47,7 +47,13 @@ Example face tracking data returned:
   local fd = require "plugin.faceDetector"
 
   local function listener(event)
-	print ( "Number of faces detected: "..#event.faces )
+  	local faces = event.faces
+	print ( "Number of faces detected: "..#faces )
+	
+	for i=1, #faces do
+	  -- Simply printing mouth positions for this example
+	  print("Face "..i.." mouth position "..faces[i].mouthPosition.x..", "..faces[i].mouthPosition.y
+	end
   end
 
   local imagepath = system.pathForFile( "selfie.jpg", system.DocumentsDirectory )
