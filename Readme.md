@@ -6,6 +6,8 @@ The FaceDetector plugin analyzes images and detects if there are human faces in 
 
 Here is a small video demo: http://shakebrowser.net/fdvideo.html 
 
+This plugin is available for: iOS, Mac OS and the Corona Simulator on Mac OS.
+
 ###**Syntax**
 ```lua
 faceDetector.track ( filename[, accuracy], listener )
@@ -18,7 +20,7 @@ Path to the image file to track.
 (optional) Tracking accuracy. Can have the values "high" and "low". Default value is "high".  Low accuracy is fast. High accuracy is slower but more accurate.
 
 **listener**
-The event dispatched to the listener will be a completion event with the face features position data. The position data is relative to the images 0,0 anchor point.
+The event dispatched to the listener will be a completion event with the position data of face(s) features. The position data is relative to the images 0,0 anchor point.
 
 Example face tracking data returned:
 ```lua
