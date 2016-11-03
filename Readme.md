@@ -20,7 +20,7 @@ Path to the image file to track.
 (optional) Tracking accuracy. Can have the values "high" and "low". Default value is "high".  Low accuracy is fast. High accuracy is slower but more accurate.
 
 **listener**
-The event dispatched to the listener will be a completion event with the position data of face(s) features. The position data is relative to the images 0,0 anchor point.
+The event dispatched to the listener will be a completion event with the position data of the face(s) features. The position data is relative to the images 0,0 anchor point.
 
 Example face tracking data returned:
 ```lua
