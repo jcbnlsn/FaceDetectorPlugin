@@ -1,20 +1,33 @@
-
-------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------
 --
--- FaceDetector plugin for Corona SDK sample code
--- Created by Jacob Nielsen 2016
+--  main.lua - FaceDetectorExample
+--  Created by jcb on 06/11/2016.
 --
-------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------
 
-local fd = require "plugin.faceDetector"
+local faceDetector = require "plugin.faceDetector"
 local widget = require "widget"
 local inspect = require "inspect"
 
-local group
-local markStrokeWidth = 8
-local markRadius = 10
-
 display.setStatusBar( display.HiddenStatusBar )
+
+local group = display.newGroup()
+local markGroup = display.newGroup()
+group:insert(markGroup)
+
+-- Load image
+local filename = "photos/bob.jpg"
+--local filename = "photos/jenny.jpg"
+local baseDir = system.ResourceDirectory
+
+local image = display.newImage( filename, baseDir )
+image.anchorX, image.anchorY = 0,0
+group:insert(image)
+
+local f = display.contentWidth/image.width
+group:scale(f,f)
+
+group.x, group.y = 0,0
 
 -- Marks and overlays visibility toggle
 local marks, overlays = {}, {}
@@ -37,151 +50,113 @@ local function calculateAngle ( obj1, obj2 )
 	return a
 end
 
--- Track and mark faces
-local function detectFaces(fileName, baseDir)
+-- Mark up tracked face data
+local function markFeatures(faces)
 
-    local baseDir = baseDir or system.DocumentsDirectory
+    local markStrokeWidth = 4
+    local markRadius = 10
 
-    -- Load image
-    local img = display.newImage( fileName, baseDir )
-    img.anchorX, img.anchorY = 0,0
-    group:insert(img)
-
-    -- Scale image to screen
-    local factor = display.contentWidth/(img.width+250)
-    group:scale(factor, factor)
-    group.x, group.y = display.contentCenterX-((img.width/2)*factor)+100, display.contentCenterY-((img.height/2)*factor)
-
-    -- FaceDetector callback listener
-    local function listener(event)
-
-        print ( inspect(event))
-
-        for i=1, #event.faces do
+    for i=1, #faces do
             
-            -- Bounding boundingBox for face
-            local bounds = event.faces[i].bounds
-            local boundingBox = display.newRect(bounds.x, bounds.y, bounds.width, bounds.height)
-            group:insert(boundingBox)
-            boundingBox:setFillColor(1,1,1,0)
-            boundingBox:setStrokeColor(.6,0,.6,1)
-            boundingBox.strokeWidth = markStrokeWidth
-            table.insert(marks, boundingBox)
-            
-            -- Left eye position
-            local leftEyePos = event.faces[i].leftEyePosition
-            local leftEyeMark = display.newCircle(leftEyePos.x, leftEyePos.y, markRadius)
-            group:insert(leftEyeMark)
-            leftEyeMark:setFillColor(.6,.6,0,0)
-            leftEyeMark:setStrokeColor(.6,.6,0,1)
-            leftEyeMark.strokeWidth = markStrokeWidth
-            table.insert(marks, leftEyeMark)
-            
-            -- Right eye position
-            local rightEyePos = event.faces[i].rightEyePosition
-            local rightEyeMark = display.newCircle(rightEyePos.x, rightEyePos.y, markRadius)
-            group:insert(rightEyeMark)
-            rightEyeMark:setFillColor(.6,.6,0,0)
-            rightEyeMark:setStrokeColor(.6,.6,0,1)
-            rightEyeMark.strokeWidth = markStrokeWidth
-            table.insert(marks, rightEyeMark)
-            
-            -- Mouth position
-            local mouthPos = event.faces[i].mouthPosition
-            local mouthMark = display.newCircle(mouthPos.x, mouthPos.y, markRadius)
-            group:insert(mouthMark)
-            mouthMark:setFillColor(.6,.6,0,0)
-            mouthMark:setStrokeColor(0,.6,.6,1)
-            mouthMark.strokeWidth = markStrokeWidth
-            table.insert(marks, mouthMark)
-            
-            local angle = calculateAngle(leftEyePos, rightEyePos)
-            boundingBox.rotation = angle-90
-            
-            -- Apply silly overlays
-            local overlay = display.newImage("overlay.png")
-            overlay.x, overlay.y = bounds.x, bounds.y
-            group:insert(overlay)
-            table.insert(overlays, overlay)
-
-            overlay.rotation = angle-90
-            
-            local factor = bounds.width/(overlay.width-280)
-            overlay:scale(factor, factor)
-        end
+        -- Bounding boundingBox for face
+        local bounds = faces[i].bounds
+        local boundingBox = display.newRect(group, bounds.x, bounds.y, bounds.width, bounds.height)
+        boundingBox:setFillColor(1,1,1,0)
+        boundingBox:setStrokeColor(.6,0,.6,1)
+        boundingBox.strokeWidth = markStrokeWidth
+        table.insert(marks, boundingBox)
         
-        toggleVisibility(overlays, false)
-        toggleVisibility(marks, false)
+        -- Left eye position
+        local leftEyePos = faces[i].leftEyePosition
+        local leftEyeMark = display.newCircle(group, leftEyePos.x, leftEyePos.y, markRadius)
+        leftEyeMark:setFillColor(.6,.6,0,0)
+        leftEyeMark:setStrokeColor(.6,.6,0,1)
+        leftEyeMark.strokeWidth = markStrokeWidth
+        table.insert(marks, leftEyeMark)
+        
+        -- Right eye position
+        local rightEyePos = faces[i].rightEyePosition
+        local rightEyeMark = display.newCircle(group, rightEyePos.x, rightEyePos.y, markRadius)
+        rightEyeMark:setFillColor(.6,.6,0,0)
+        rightEyeMark:setStrokeColor(.6,.6,0,1)
+        rightEyeMark.strokeWidth = markStrokeWidth
+        table.insert(marks, rightEyeMark)
+        
+        -- Mouth position
+        local mouthPos = faces[i].mouthPosition
+        local mouthMark = display.newCircle(group, mouthPos.x, mouthPos.y, markRadius)
+        mouthMark:setFillColor(.6,.6,0,0)
+        mouthMark:setStrokeColor(0,.6,.6,1)
+        mouthMark.strokeWidth = markStrokeWidth
+        table.insert(marks, mouthMark)
+        
+        local angle = calculateAngle(leftEyePos, rightEyePos)
+        boundingBox.rotation = angle-90
     end
-
-    -- Track image
-    local path = system.pathForFile( fileName, baseDir )
-    --local accuracy = "low" -- optional: default is "high"
-    fd.track(path, accuracy, listener )
 end
 
--- Pick photo event handler
-local function onComplete(event)
+-- Example usage: apply silly overlay
+local function applyOverlay(faces)
 
-    if event.target then
-        local img = event.target
-        local fileName = "photo.png"
-        local factor = display.contentWidth/img.width
-        img:scale(factor, factor)
-        img.x, img.y = display.contentCenterX, display.contentCenterY
-        display.save( img, { filename=fileName, baseDir=system.DocumentsDirectory, captureOffscreenArea=false } )
-        display.remove(img)
-        img=nil
+    for i=1, #faces do
+        
+        local bounds = faces[i].bounds
 
-        detectFaces(fileName)
+        local overlay = display.newImage("overlay.png")
+        overlay.x, overlay.y = bounds.x, bounds.y
+        group:insert(overlay)
+        table.insert(overlays, overlay)
+
+        local angle = calculateAngle(faces[i].leftEyePosition, faces[i].rightEyePosition)
+        overlay.rotation = angle-90
+        
+        local factor = bounds.width/(overlay.width-280)
+        overlay:scale(factor, factor)
     end
 end
+
+-- Face Detector callback listener
+local function listener(event)
+
+    print("Number of faces found: "..#event.faces)
+    print (inspect(event))
+
+    markFeatures(event.faces)
+    applyOverlay(event.faces)
+
+    toggleVisibility(overlays, false)
+end
+
+-- Face detector track image
+local path = system.pathForFile( filename, baseDir )
+--local accuracy = "low" -- optional: default is "high"
+faceDetector.track(path, accuracy, listener )
 
 -- Button event handler
 local function handleButtonEvent(event)
-
-    if event.target.id == "pick" then
-        
-        -- Clean previous image group
-        if group then
-            display.remove(group)
-            group=nil
-        end
-        group = display.newGroup()
-        group:toBack()
-    
-        -- Pick a photo
-        if media.hasSource( media.PhotoLibrary ) then
-           media.selectPhoto( { mediaSource=media.PhotoLibrary, listener=onComplete } )
-        else
-           native.showAlert( "Notice", "This device does not have a photo library.", { "OK" } )
-        end
-        
-    elseif event.target.id == "track" then
+    if event.target.id == "Marks" then
         toggleVisibility(marks)
-    elseif event.target.id == "overlay" then
-        toggleVisibility(overlays )
+    elseif event.target.id == "Overlay" then
+        toggleVisibility(overlays)
     end
 end
 
 -- Buttons
-local options = {"pick", "track", "overlay"}
+local options = {"Marks", "Overlay"}
 for i=1, #options do
     local button = widget.newButton(
     {
         label = options[i],
-        fontSize = 40,
+        fontSize = 30,
         id = options[i],
         onRelease = handleButtonEvent,
         shape = "roundedRect",
         width = 150,
         height = 70,
         cornerRadius = 10,
-        fillColor = { default={.4,.7,1,1}, over={.4,.7,1,.8} },
+        fillColor = { default={.3,.6,.9,1}, over={.4,.7,1,1} },
         labelColor = { default={1,1,1,1}, over={1,1,1,1} }
         
     })
-    button.x, button.y = 110 , (i*120)-50
+    button.x, button.y = 150 , (i*100)
 end
-
-
