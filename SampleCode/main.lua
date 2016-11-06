@@ -12,13 +12,11 @@ local inspect = require "inspect"
 display.setStatusBar( display.HiddenStatusBar )
 
 local group = display.newGroup()
-local markGroup = display.newGroup()
-group:insert(markGroup)
 
 -- Load image
 local filename = "photos/bob.jpg"
 --local filename = "photos/jenny.jpg"
-local baseDir = system.ResourceDirectory
+local baseDir = system.ResourceDirectory -- system.DocumentsDirectory
 
 local image = display.newImage( filename, baseDir )
 image.anchorX, image.anchorY = 0,0
@@ -26,7 +24,6 @@ group:insert(image)
 
 local f = display.contentWidth/image.width
 group:scale(f,f)
-
 group.x, group.y = 0,0
 
 -- Marks and overlays visibility toggle
@@ -44,7 +41,6 @@ local function calculateAngle ( obj1, obj2 )
 	local xDist = obj2.x-obj1.x
 	local yDist = obj2.y-obj1.y
 	local a = math.deg (math.atan( yDist/xDist ))
-	
 	if ( obj1.x < obj2.x ) then a = a+90 else a = a+270 end
 	
 	return a
