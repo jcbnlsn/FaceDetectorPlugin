@@ -14,6 +14,10 @@ settings =
 		default = "landscapeRight",
 		supported = { "landscapeRight", }
 	},
+
+	plugins = {
+        ["plugin.faceDetector"] = { publisherId = "net.shakebrowser" }
+    },
 	
 	excludeFiles =
 	{
