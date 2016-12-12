@@ -48,7 +48,7 @@ Example face tracking data returned:
 ```
 ###**Project Settings**
 To use this plugin, add an entry into the plugins table of build.settings. When added, the build server will integrate the plugin during the build phase.
-'''lua
+```lua
 settings =
 {
     plugins =
@@ -56,7 +56,7 @@ settings =
         ["plugin.faceDetector"] = { publisherId = "net.shakebrowser" }
     },      
 }
-'''
+```
 ###**Example**
 ```lua
   local fd = require "plugin.faceDetector"
