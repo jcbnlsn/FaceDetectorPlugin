@@ -1,6 +1,7 @@
 
 Documentation and samplecode for:
 ###**Face Detector Plugin for Corona SDK**
+https://marketplace.coronalabs.com/plugin/face-detector
 
 The Face Detector plugin can analyze an image and detect if there are human faces in it.  The plugin returns position data for bounding boxes, eyes and mouths of the faces detected in the image.
 
