@@ -1,6 +1,6 @@
 
 Documentation and samplecode for:
-###**Face Detector Plugin for Corona SDK**
+### **Face Detector Plugin for Corona SDK**
 https://marketplace.coronalabs.com/plugin/face-detector
 
 The Face Detector plugin can analyze an image and detect if there are human faces in it.  The plugin returns position data for bounding boxes, eyes and mouths of the faces detected in the image.
@@ -9,7 +9,7 @@ Here is a video demo: http://shakebrowser.net/fdvideo.html
 
 This plugin is available for: iOS, Mac OS and the Corona Simulator on Mac OS.
 
-#**Syntax**
+### **Syntax**
 ```lua
 faceDetector.track ( filename[, accuracy], listener )
 ```
@@ -47,7 +47,7 @@ Example face tracking data returned:
     }
   }
 ```
-###**Project Settings**
+### **Project Settings**
 To use this plugin, add an entry into the plugins table of build.settings. When added, the build server will integrate the plugin during the build phase.
 ```lua
 settings =
@@ -58,7 +58,7 @@ settings =
     },      
 }
 ```
-###**Example**
+### **Example**
 ```lua
   local fd = require "plugin.faceDetector"
 
