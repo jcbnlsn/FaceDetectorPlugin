@@ -9,7 +9,7 @@ Here is a video demo: http://shakebrowser.net/fdvideo.html
 
 This plugin is available for: iOS, Mac OS and the Corona Simulator on Mac OS.
 
-###**Syntax**
+#**Syntax**
 ```lua
 faceDetector.track ( filename[, accuracy], listener )
 ```
