@@ -1,13 +1,13 @@
 
 Documentation and samplecode for:
-### **Face Detector Plugin for Corona SDK**
+### **Face Detector Plugin for Solar2D**
 https://marketplace.coronalabs.com/plugin/face-detector
 
 The Face Detector plugin can analyze an image and detect if there are human faces in it.  The plugin returns position data for bounding boxes, eyes and mouths of the faces detected in the image.
 
 Here is a video demo: http://shakebrowser.net/fdvideo.html 
 
-This plugin is available for: iOS, Mac OS and the Corona Simulator on Mac OS.
+This plugin is available for: iOS, Mac OS and the Solar2D Simulator on Mac OS.
 
 ### **Syntax**
 ```lua
